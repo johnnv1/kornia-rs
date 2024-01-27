@@ -25,6 +25,7 @@ pub fn kornia_rs(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(read_image_jpeg, m)?)?;
     m.add_function(wrap_pyfunction!(write_image_jpeg, m)?)?;
     m.add_function(wrap_pyfunction!(read_image_any, m)?)?;
+    m.add_function(wrap_pyfunction!(read_raster, m)?)?;
     m.add_class::<PyTensor>()?;
     m.add_class::<PyImageSize>()?;
     m.add_class::<PyImageDecoder>()?;

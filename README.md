@@ -136,6 +136,53 @@ maturin develop --extras dev
 pytest test/
 ```
 
+### Features
+
+#### `geo`
+
+Building the package with the geo feature:
+```bash
+$ cargo build --features geo
+```
+
+This will expose all rust code which have been configured to be part of this feature with:
+
+```rust
+#[cfg(feature = "geo")]
+...
+```
+
+To use this feature you need to have the gdal binary installed in your environment. We use the
+bidings from https://docs.rs/crate/gdal to access the gdal functions.
+
+Setup the environment with conda:
+
+```bash
+# Create the conda env
+$ conda create -p venv python=<python version>
+$ conda activate venv
+
+# Installing gdal
+$ conda install conda-forge::gda
+
+# Install rust-env
+$ pip install renv
+
+# Create and activate the rust env
+$ rustenv renv
+$ . renv/bin/activate
+
+# Install the nasm (kornia-rs dev dep)
+$ conda install anaconda::nasm
+
+# Build kornia-rs within geo feature
+# For it we need to set the `PKG_CONFIG_PATH` which should have the `gdal.pc`. Considering you is
+# on the kornia-rs repository in the `/tmp/` directory, it will be:
+$ PKG_CONFIG_PATH=/tmp/kornia-rs/venv/lib/pkgconfig/ cargo build --features geo
+
+```
+
+
 ## Contributing
 
 This is a child project of [Kornia](https://github.com/kornia/kornia). Join the community to get in touch with us, or just sponsor the project: https://opencollective.com/kornia
