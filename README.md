@@ -155,6 +155,8 @@ This will expose all rust code which have been configured to be part of this fea
 To use this feature you need to have the gdal binary installed in your environment. We use the
 bidings from https://docs.rs/crate/gdal to access the gdal functions.
 
+You can setup gdal from source or use conda for it, check bellow.
+
 Setup the environment with conda:
 
 ```bash
@@ -162,8 +164,15 @@ Setup the environment with conda:
 $ conda create -p venv python=<python version>
 $ conda activate venv
 
-# Installing gdal
-$ conda install conda-forge::gda
+# Installing gdal from conda
+$ conda install conda-forge::gdal
+
+# Or install gdal from source
+$ add-apt-repository -y ppa:ubuntugis/ppa
+$ apt install -y --no-install-recommends gdal-bin libgdal-dev
+$ export CPLUS_INCLUDE_PATH=/usr/include/gdal
+$ export C_INCLUDE_PATH=/usr/include/gdal
+
 
 # Install rust-env
 $ pip install renv
@@ -172,14 +181,22 @@ $ pip install renv
 $ rustenv renv
 $ . renv/bin/activate
 
-# Install the nasm (kornia-rs dev dep)
+# Install the nasm from conda (kornia-rs dev dep)
 $ conda install anaconda::nasm
+# Or install gdal from source
+$ apt install -y --no-install-recommends nasm
 
 # Build kornia-rs within geo feature
+# If you install gdal from Conda you will need to manually setup the env var.
 # For it we need to set the `PKG_CONFIG_PATH` which should have the `gdal.pc`. Considering you is
 # on the kornia-rs repository in the `/tmp/` directory, it will be:
 $ PKG_CONFIG_PATH=/tmp/kornia-rs/venv/lib/pkgconfig/ cargo build --features geo
 
+# If you installed gdal from source, and setup it's global variables, it should work with:
+$ cargo build --features geo
+
+# Testing it throught the exmaple
+$ cargo run --example geo --features geo
 ```
 
 
