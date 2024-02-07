@@ -1,12 +1,6 @@
-mod dlpack;
-mod image;
-mod io;
-mod tensor;
+use kornia_rs::image::{Image, ImageSize};
 
-use crate::image::PyImageSize;
-use crate::io::functions::{read_image_any, read_image_jpeg, write_image_jpeg};
-use crate::io::jpeg::{PyImageDecoder, PyImageEncoder};
-use crate::tensor::PyTensor;
+use numpy::{IntoPyArray, PyArray1, PyArray2, PyArrayDyn, PyReadonlyArrayDyn};
 use pyo3::prelude::*;
 
 pub fn get_version() -> String {
@@ -19,15 +13,20 @@ pub fn get_version() -> String {
     version.replace("-alpha", "a").replace("-beta", "b")
 }
 
+pub fn create_image<'py>(py: Python<'py>, x: PyArrayDyn<f32>) {
+    let mut array = unsafe { x.as_array_mut() };
+}
+
 #[pymodule]
 pub fn kornia_rs(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add("__version__", get_version())?;
-    m.add_function(wrap_pyfunction!(read_image_jpeg, m)?)?;
-    m.add_function(wrap_pyfunction!(write_image_jpeg, m)?)?;
-    m.add_function(wrap_pyfunction!(read_image_any, m)?)?;
-    m.add_class::<PyTensor>()?;
-    m.add_class::<PyImageSize>()?;
-    m.add_class::<PyImageDecoder>()?;
-    m.add_class::<PyImageEncoder>()?;
+    m.add_function(wrap_pyfunction!(create_image, m)?)?;
+    // m.add_function(wrap_pyfunction!(write_image_jpeg, m)?)?;
+    // m.add_function(wrap_pyfunction!(read_image_any, m)?)?;
+    // m.add_class::<PyTensor>()?;
+    // m.add_class::<PyImageSize>()?;
+    // m.add_class::<PyImageDecoder>()?;
+    // m.add_class::<PyImageEncoder>()?;
+
     Ok(())
 }
